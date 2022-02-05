@@ -37,9 +37,26 @@ namespace NodesTreeManager.Data
             return await _nodeDbContext.Nodes.FindAsync(id);
         }
 
-        public Task<IEnumerable<NodeTree>> GetAllNodes()
+        public async Task<IEnumerable<NodeTree>> GetAllNodes()
         {
-            throw new NotImplementedException();
+            List<NodeTree> nodes = new List<NodeTree>();
+            nodes = await GetChildNodes(0);
+            return nodes;
+        }
+
+        private async Task<List<NodeTree>> GetChildNodes(int parentId)
+        {
+            var nodes = new List<NodeTree>();
+            nodes = await _nodeDbContext.Nodes.Where(item => item.ParentId == parentId).
+                Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
+                .ToListAsync();
+
+            foreach (var node in nodes)
+            {
+                node.NodesChild = await GetChildNodes(node.Id);
+            }
+
+            return nodes;
         }
     }
 }
