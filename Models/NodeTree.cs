@@ -7,6 +7,6 @@ namespace NodesTreeManager.Models
 {
     public class NodeTree : Node
     {
-        public List<Node> NodesChild { get; set; }
+        public List<NodeTree> NodesChild { get; set; }
     }
 }

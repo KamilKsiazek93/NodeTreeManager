@@ -24,6 +24,12 @@ namespace NodesTreeManager.Controllers
         {
             return await _dataRepository.GetAllNodes();
         }
+        
+        [HttpGet("node/{id}")]
+        public async Task<List<NodeTree>> GetChildNode(int id)
+        {
+            return await _dataRepository.GetNode(id);
+        }
 
         [HttpPost("node")]
         public async Task<ActionResult> AddNode(Node node)
