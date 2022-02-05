@@ -55,8 +55,8 @@ namespace NodesTreeManager.Controllers
         [HttpDelete("node/{id}")]
         public async Task<ActionResult> DeleteNode(int id)
         {
-            var node = await _dataRepository.FindNode(id);
-            if(node == null)
+            var node = await _dataRepository.GetNode(id);
+            if(!node.Any())
             {
                 return NotFound(new { message = "Nie znaleziono podanego elementu" });
             }

@@ -20,9 +20,9 @@ namespace NodesTreeManager.Data
             await _nodeDbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteNode(Node node)
+        public async Task DeleteNode(List<NodeTree> nodes)
         {
-            _nodeDbContext.Remove(node);
+            _nodeDbContext.RemoveRange(nodes);
             await _nodeDbContext.SaveChangesAsync();
         }
 
