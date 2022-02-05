@@ -13,6 +13,6 @@ namespace NodesTreeManager.Data
         Task<Node> FindNode(int id);
         Task AddNode(Node node);
         Task EditNode(Node node);
-        Task DeleteNode(Node node);
+        Task DeleteNode(List<NodeTree> nodes);
     }
 }
