@@ -1,6 +1,6 @@
 CREATE TABLE [nodes] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
-  [ParrentId] int,
+  [ParentId] int,
   [Name] nvarchar(255)
 )
 GO
