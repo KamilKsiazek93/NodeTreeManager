@@ -8,9 +8,15 @@ namespace NodesTreeManager.Data
 {
     public class DataRepository : IDataRepository
     {
-        public Task AddNode(Node node)
+        private readonly NodeDbContext _nodeDbContext;
+        public DataRepository(NodeDbContext nodeDbContext)
         {
-            throw new NotImplementedException();
+            _nodeDbContext = nodeDbContext;
+        }
+        public async Task AddNode(Node node)
+        {
+            await _nodeDbContext.Nodes.AddAsync(node);
+            await _nodeDbContext.SaveChangesAsync();
         }
 
         public Task DeleteNode(Node node)
