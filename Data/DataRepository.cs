@@ -23,6 +23,11 @@ namespace NodesTreeManager.Data
             throw new NotImplementedException();
         }
 
+        public Task<Node> FindNode(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<NodeTree>> GetAllNodes()
         {
             throw new NotImplementedException();
