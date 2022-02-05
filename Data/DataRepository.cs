@@ -19,9 +19,10 @@ namespace NodesTreeManager.Data
             await _nodeDbContext.SaveChangesAsync();
         }
 
-        public Task DeleteNode(Node node)
+        public async Task DeleteNode(Node node)
         {
-            throw new NotImplementedException();
+            _nodeDbContext.Remove(node);
+            await _nodeDbContext.SaveChangesAsync();
         }
 
         public Task EditNode(Node node)
@@ -29,9 +30,9 @@ namespace NodesTreeManager.Data
             throw new NotImplementedException();
         }
 
-        public Task<Node> FindNode(int id)
+        public async Task<Node> FindNode(int id)
         {
-            throw new NotImplementedException();
+            return await _nodeDbContext.Nodes.FindAsync(id);
         }
 
         public Task<IEnumerable<NodeTree>> GetAllNodes()
