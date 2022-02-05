@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace NodesTreeManager.Data
 {
@@ -25,9 +26,10 @@ namespace NodesTreeManager.Data
             await _nodeDbContext.SaveChangesAsync();
         }
 
-        public Task EditNode(Node node)
+        public async Task EditNode(Node node)
         {
-            throw new NotImplementedException();
+            _nodeDbContext.Entry(node).State = EntityState.Modified;
+            await _nodeDbContext.SaveChangesAsync();
         }
 
         public async Task<Node> FindNode(int id)
