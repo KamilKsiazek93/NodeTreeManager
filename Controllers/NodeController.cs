@@ -41,14 +41,12 @@ namespace NodesTreeManager.Controllers
         [HttpPut("node/{id}")]
         public async Task<ActionResult> EditNode(Node node)
         {
-            try
+            var newParent = await _dataRepository.GetNode(node.ParentId);
+            if(!newParent.Any() && node.ParentId != 0)
             {
-                await _dataRepository.EditNode(node);
+                return NotFound(new { message = "Nie można przypisać tego elementu do elementu narzędnego" });
             }
-            catch
-            {
-                NotFound(new { message = "Nie udało się zaktualizować danych" });
-            }
+            await _dataRepository.EditNode(node);
             return Ok(new { message = "Zaktualizowano dane" });
         }
 
