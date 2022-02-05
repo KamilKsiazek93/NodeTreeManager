@@ -27,6 +27,7 @@ namespace NodesTreeManager
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
