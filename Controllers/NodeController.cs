@@ -31,6 +31,12 @@ namespace NodesTreeManager.Controllers
             return await _dataRepository.GetNode(id);
         }
 
+        [HttpGet("nodes/names")]
+        public async Task<IEnumerable<NodesNames>> GetNodesNames()
+        {
+            return await _dataRepository.GetNodesNames();
+        }
+
         [HttpPost("nodes")]
         public async Task<ActionResult> AddNode(Node node)
         {

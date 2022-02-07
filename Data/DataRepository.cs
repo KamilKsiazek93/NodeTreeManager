@@ -75,5 +75,11 @@ namespace NodesTreeManager.Data
 
             return nodes;
         }
+
+        public async Task<IEnumerable<NodesNames>> GetNodesNames()
+        {
+            return await _nodeDbContext.Nodes.Select(node => new NodesNames()
+            { Id = node.Id, Name = node.Name }).ToListAsync();
+        }
     }
 }
