@@ -25,20 +25,20 @@ namespace NodesTreeManager.Controllers
             return await _dataRepository.GetAllNodes();
         }
         
-        [HttpGet("node/{id}")]
+        [HttpGet("nodes/{id}")]
         public async Task<List<NodeTree>> GetChildNode(int id)
         {
             return await _dataRepository.GetNode(id);
         }
 
-        [HttpPost("node")]
+        [HttpPost("nodes")]
         public async Task<ActionResult> AddNode(Node node)
         {
             await _dataRepository.AddNode(node);
             return Ok(new { message = "Dodano nowy element" });
         }
 
-        [HttpPut("node/{id}")]
+        [HttpPut("nodes/{id}")]
         public async Task<ActionResult> EditNode(Node node)
         {
             var newParent = await _dataRepository.GetNode(node.ParentId);
@@ -50,7 +50,7 @@ namespace NodesTreeManager.Controllers
             return Ok(new { message = "Zaktualizowano dane" });
         }
 
-        [HttpDelete("node/{id}")]
+        [HttpDelete("nodes/{id}")]
         public async Task<ActionResult> DeleteNode(int id)
         {
             var node = await _dataRepository.GetNode(id);
