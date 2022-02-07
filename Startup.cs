@@ -40,6 +40,12 @@ namespace NodesTreeManager
             });
 
             services.AddScoped<IDataRepository, DataRepository>();
+
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder => 
+            builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithOrigins(Configuration["Frontend"])));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +61,8 @@ namespace NodesTreeManager
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
