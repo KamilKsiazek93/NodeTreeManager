@@ -22,6 +22,27 @@ namespace NodesTreeManager.Data
 
         public async Task DeleteNode(List<NodeTree> nodes)
         {
+            // _nodeDbContext.RemoveRange(nodes);
+            foreach(var node in nodes)
+            {
+                await RemoveChildNode(node.Id);
+            }
+
+            _nodeDbContext.RemoveRange(nodes);
+            await _nodeDbContext.SaveChangesAsync();
+        }
+
+        private async Task RemoveChildNode(int parentId)
+        {
+            var nodes = await _nodeDbContext.Nodes.Where(item => item.ParentId == parentId).
+                Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
+                .OrderBy(node => node.Name).ToListAsync();
+
+            foreach (var node in nodes)
+            {
+                node.NodesChild = await GetChildNodes(node.Id);
+            }
+
             _nodeDbContext.RemoveRange(nodes);
             await _nodeDbContext.SaveChangesAsync();
         }
@@ -66,7 +87,7 @@ namespace NodesTreeManager.Data
             var nodes = new List<NodeTree>();
             nodes = await _nodeDbContext.Nodes.Where(item => item.ParentId == parentId).
                 Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
-                .ToListAsync();
+                .OrderBy(node => node.Name).ToListAsync();
 
             foreach (var node in nodes)
             {
@@ -79,7 +100,7 @@ namespace NodesTreeManager.Data
         public async Task<IEnumerable<NodesNames>> GetNodesNames()
         {
             return await _nodeDbContext.Nodes.Select(node => new NodesNames()
-            { Id = node.Id, Name = node.Name }).ToListAsync();
+            { Id = node.Id, Name = node.Name }).OrderBy(node => node.Name).ToListAsync();
         }
     }
 }
