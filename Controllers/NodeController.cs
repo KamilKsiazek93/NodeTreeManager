@@ -32,7 +32,7 @@ namespace NodesTreeManager.Controllers
         }
 
         [HttpGet("nodes/names")]
-        public async Task<IEnumerable<NodesNames>> GetNodesNames()
+        public async Task<IEnumerable<Node>> GetNodesNames()
         {
             return await _dataRepository.GetNodesNames();
         }

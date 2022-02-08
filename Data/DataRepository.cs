@@ -97,10 +97,9 @@ namespace NodesTreeManager.Data
             return nodes;
         }
 
-        public async Task<IEnumerable<NodesNames>> GetNodesNames()
+        public async Task<IEnumerable<Node>> GetNodesNames()
         {
-            return await _nodeDbContext.Nodes.Select(node => new NodesNames()
-            { Id = node.Id, Name = node.Name }).OrderBy(node => node.Name).ToListAsync();
+            return await _nodeDbContext.Nodes.OrderBy(node => node.Name).ToListAsync();
         }
     }
 }
