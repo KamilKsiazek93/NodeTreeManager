@@ -22,7 +22,6 @@ namespace NodesTreeManager.Data
 
         public async Task DeleteNode(List<NodeTree> nodes)
         {
-            // _nodeDbContext.RemoveRange(nodes);
             foreach(var node in nodes)
             {
                 await RemoveChildNode(node.Id);
@@ -40,7 +39,7 @@ namespace NodesTreeManager.Data
 
             foreach (var node in nodes)
             {
-                node.NodesChild = await GetChildNodes(node.Id);
+                await RemoveChildNode(node.Id);
             }
 
             _nodeDbContext.RemoveRange(nodes);
