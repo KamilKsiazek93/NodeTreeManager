@@ -33,9 +33,7 @@ namespace NodesTreeManager.Data
 
         private async Task RemoveChildNode(int parentId)
         {
-            var nodes = await _nodeDbContext.Nodes.Where(item => item.ParentId == parentId).
-                Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
-                .OrderBy(node => node.Name).ToListAsync();
+            var nodes = await GetNodesWithParentId(parentId);
 
             foreach (var node in nodes)
             {
@@ -44,6 +42,13 @@ namespace NodesTreeManager.Data
 
             _nodeDbContext.RemoveRange(nodes);
             await _nodeDbContext.SaveChangesAsync();
+        }
+
+        private async Task<List<NodeTree>> GetNodesWithParentId(int parentId)
+        {
+            return await _nodeDbContext.Nodes.Where(item => item.ParentId == parentId).
+                            Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
+                            .OrderBy(node => node.Name).ToListAsync();
         }
 
         public async Task EditNode(Node node)
@@ -69,10 +74,7 @@ namespace NodesTreeManager.Data
 
         private async Task<List<NodeTree>> GetParentNodes(int id)
         {
-            var nodes = new List<NodeTree>();
-            nodes = await _nodeDbContext.Nodes.Where(item => item.Id == id).
-                Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
-                .ToListAsync();
+            var nodes = await GetChildNodesWithNodeId(id);
 
             foreach (var node in nodes)
             {
@@ -81,12 +83,16 @@ namespace NodesTreeManager.Data
             return nodes;
         }
 
+        private async Task<List<NodeTree>> GetChildNodesWithNodeId(int id)
+        {
+            return await _nodeDbContext.Nodes.Where(item => item.Id == id).
+                Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
+                .ToListAsync();
+        }
+
         private async Task<List<NodeTree>> GetChildNodes(int parentId)
         {
-            var nodes = new List<NodeTree>();
-            nodes = await _nodeDbContext.Nodes.Where(item => item.ParentId == parentId).
-                Select(node => new NodeTree() { Id = node.Id, ParentId = node.ParentId, Name = node.Name })
-                .OrderBy(node => node.Name).ToListAsync();
+            var nodes = await GetNodesWithParentId(parentId);
 
             foreach (var node in nodes)
             {
@@ -99,6 +105,23 @@ namespace NodesTreeManager.Data
         public async Task<IEnumerable<Node>> GetNodesNames()
         {
             return await _nodeDbContext.Nodes.OrderBy(node => node.Name).ToListAsync();
+        }
+
+        public async Task<bool> IsNewParentCurrentChild(int nodeId, int providedParentId)
+        {
+            var childNodes = await GetNodesWithParentId(nodeId);
+            foreach (var childNode in childNodes)
+            {
+                if (childNode.Id == providedParentId)
+                {
+                    return true;
+                }
+                if(await IsNewParentCurrentChild(childNode.Id, providedParentId))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

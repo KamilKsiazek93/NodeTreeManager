@@ -47,8 +47,13 @@ namespace NodesTreeManager.Controllers
         [HttpPut("nodes/{id}")]
         public async Task<ActionResult> EditNode(Node node)
         {
+            if(await _dataRepository.IsNewParentCurrentChild(node.Id, node.ParentId))
+            {
+                return BadRequest(new { message = "Nie można przypisać elementu nadrzędnego do jego dziecka. " +
+                    "Przenieś podrzędne elementy na inną gałąź przed wykonaniem operacji" });
+            }
             var newParent = await _dataRepository.GetNode(node.ParentId);
-            if(!newParent.Any() && node.ParentId != 0)
+            if (!newParent.Any() && node.ParentId != 0)
             {
                 return NotFound(new { message = "Nie można przypisać tego elementu do elementu narzędnego" });
             }

@@ -14,6 +14,7 @@ namespace NodesTreeManager.Data
         Task<Node> FindNode(int id);
         Task AddNode(Node node);
         Task EditNode(Node node);
+        Task<Boolean> IsNewParentCurrentChild(int nodeId, int providedParentId);
         Task DeleteNode(List<NodeTree> nodes);
     }
 }
